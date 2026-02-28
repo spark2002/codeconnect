@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 const {auth, userauth} = require("./middleware/auth");
@@ -15,6 +17,7 @@ const authRouter = require("./routers/auth");
 const userRouter = require("./routers/user");
 const profileRouter = require("./routers/profile");
 const requestRouter = require("./routers/request");
+
 
 app.use(cors(
     {
@@ -43,7 +46,7 @@ app.get("/user",auth,(req,res)=>{
 });
 
 const connectdb = async ()=>{
-    await mongoose.connect("mongodb+srv://User1:PUW3hzgomKAoNKV8@practiceproject2002.locta9t.mongodb.net/");
+    await mongoose.connect(process.env.DB_CONNECTION_SECRET);
 };
 
 /*app.post("/signup",async(req,res)=>{
@@ -109,9 +112,5 @@ app.listen("4000", ()=>{
 
 
 connectdb()
-.then(()=>{
-    console.log("connected");
-})
-.catch((err)=>{
-    console.log("not connecetd")
-})
+  .then(() => console.log("connected"))
+  .catch((err) => console.log("not connected:", err.message));

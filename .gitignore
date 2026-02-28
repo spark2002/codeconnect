@@ -27,3 +27,13 @@ node_modules
 dist
 .env
 
+# Dependencies
+node_modules/
+
+# Env files
+.env
+.env.*
+
+# Build output
+dist/
+build/

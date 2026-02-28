@@ -21,7 +21,7 @@ const userauth = async(req,res,next)=>{
         throw new Error("token is missing");
     }
 
-    const decoded = jwt.verify(token, "DEV@tinder$790");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const {_id}=decoded;
 
     const user = await User.findById(_id);
