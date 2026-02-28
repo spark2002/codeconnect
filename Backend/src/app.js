@@ -21,10 +21,14 @@ const requestRouter = require("./routers/request");
 
 app.use(cors(
     {
-        origin : "http://localhost:5173",
+        origin: [
+  "http://localhost:5173",
+  "https://codeconnect-temp.vercel.app"
+],
         credentials : true,
     }
 ));
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -103,9 +107,9 @@ app.patch("/updateall",async(req,res)=>{
 })
 
 
-
-app.listen("4000", ()=>{
-    console.log("inside console");
+PORT=process.env.PORT||4000;
+app.listen(PORT, ()=>{
+    console.log(`Server running on port ${PORT}`);
 });
 
 
