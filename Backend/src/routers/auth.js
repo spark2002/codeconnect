@@ -4,10 +4,11 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
 const router = express.Router();
+const isProduction = process.env.NODE_ENV === "production";
 const cookieOptions = {
     httpOnly: true,
-    secure: false,
-    sameSite: "strict",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/"
 };
 
@@ -88,8 +89,8 @@ router.post("/login",async(req,res)=>{
 router.post("/logout", (req,res)=>{
     res.clearCookie("token", {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/"
     });
     res.send("logged out");

@@ -1,4 +1,5 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const express = require("express");
 const app = express();
@@ -18,13 +19,17 @@ const userRouter = require("./routers/user");
 const profileRouter = require("./routers/profile");
 const requestRouter = require("./routers/request");
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://codeconnect-temp.vercel.app",
+    process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.set("trust proxy", 1);
 
 app.use(cors(
     {
-        origin: [
-  "http://localhost:5173",
-  "https://codeconnect-temp.vercel.app"
-],
+        origin: allowedOrigins,
         credentials : true,
     }
 ));
@@ -50,7 +55,13 @@ app.get("/user",auth,(req,res)=>{
 });
 
 const connectdb = async ()=>{
-    await mongoose.connect(process.env.DB_CONNECTION_SECRET);
+    const dbUri = process.env.DB_CONNECTION_SECRET;
+
+    if (!dbUri) {
+        throw new Error("DB_CONNECTION_SECRET is not set");
+    }
+
+    await mongoose.connect(dbUri);
 };
 
 /*app.post("/signup",async(req,res)=>{
